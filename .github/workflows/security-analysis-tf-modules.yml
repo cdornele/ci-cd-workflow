@@ -1,0 +1,29 @@
+name: Terraform Security Analysis
+
+on:
+  workflow_call:
+
+jobs:
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+
+      - name: terraform security scan
+        uses: aquasecurity/tfsec-sarif-action@v0.1.4
+        with:
+          sarif_file: tfsec.sarif
+
+      - name: upload sarif file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: tfsec.sarif

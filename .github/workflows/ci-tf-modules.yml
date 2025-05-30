@@ -1,4 +1,21 @@
-name: ci-tf-modules.yml
+name: Generic CI PR - Terraform Modules
+
 on:
+  workflow_call:
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
+  validate:
+    uses:  ./.github/workflows/validate-tf-modules.yml
+
+  # lint:
+  #   uses:  ./.github/workflows/lint-tf-modules.yml
+
+  doc:
+    needs: [validate]
+    uses:  ./.github/workflows/docs-tf-modules.yml
+
+  security-check:
+    needs: [doc]
+    uses:  ./.github/workflows/security-analysis-tf-modules.yml

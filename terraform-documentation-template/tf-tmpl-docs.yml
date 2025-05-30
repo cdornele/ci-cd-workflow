@@ -1,0 +1,39 @@
+---
+formatter: "markdown"
+settings:
+  anchor: false
+  lockfile: false
+output:
+  file: "README.md"
+sections:
+  hide: [requirements]
+content: |-
+  ## Version compatibility by CD Azure Modules
+  
+  | Module version | Terraform version | AzureRM version |
+  | -------------- | ----------------- | --------------- |
+  | >= 2.x.x       | .13.x            | < 4.10          |
+  | >= 1.x.x       | .13.x            | < 4.10          |
+  
+  ## Contributing
+  
+  If you’d like to contribute to this repository, you’re welcome to use our pre-commit Git hook configuration. It helps automate file updates and formatting while ensuring compliance with our Terraform module best practices.
+  
+  For more details, check out the CONTRIBUTING.md file.
+  
+  ## Usage
+  
+  ```hcl
+  {{ include "examples/main/example.tf" }}
+  ```
+  
+  {{ .Providers }}
+  
+  {{ .Modules }}
+  
+  {{ .Resources }}
+  
+  {{ .Inputs }}
+  
+  {{ .Outputs }}
+...

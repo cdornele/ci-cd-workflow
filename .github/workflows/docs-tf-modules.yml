@@ -1,4 +1,32 @@
-name: docs-tf-modules.yml
+name: Terraform Documentation - Documentation Generator
 on:
+  workflow_call:
 
 jobs:
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - run: git config --global user.name 'github-actions'
+      - run: git config --global user.email 'github-actions@github.com'
+
+      - name: Checkout CI repository
+        uses: actions/checkout@v3
+        with:
+          repository: "cdornele/ci-cd-workflow"
+          ref: "development"
+          path: ".github/ci-cd-workflow"
+
+      - name: Render terraform docs inside root the README.md and push changes back to PR branch
+        uses: terraform-docs/gh-actions@v1.3.0
+        with:
+          working-dir: .
+          config-file: .github/ci-cd-workflow/terraform-documentation-template/tf-tmpl-docs.yml
+          output-file: README.md
+          output-method: inject
+          git-push: "true"

@@ -1,4 +1,24 @@
-name: validate-tf-modules.yml
+name: Terraform Validation - Code Sanitizer
+
 on:
+  workflow_call:
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: lastest
+
+      - name: fmt
+        run: terraform fmt -write=true -diff -check -recursive
+
+      - name: validate
+        run: |
+          terraform init
+          terraform validate
