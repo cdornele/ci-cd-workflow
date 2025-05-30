@@ -1,0 +1,11 @@
+name: Generic CI Close PR- Terraform Modules
+
+on:
+  workflow_call:
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+jobs:
+  taggin:
+    uses: ./.github/workflows/tag-tf-modules.yml
