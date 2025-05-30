@@ -1,0 +1,31 @@
+name: Terraform Tagging
+on:
+  workflow_call:
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0 # Fetch all history for tagging
+
+      - name: Install yq
+        run: sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+
+      - name: Configure Git User
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Create and Push Tag
+        run: |
+          config_version=$(yq .version .config/config.yaml)
+          tag_name="v${config_version}" # Consistently use v-prefix
+          echo "Tagging version ${tag_name}"
+          # Create an annotated tag. This will fail if the tag already exists.
+          git tag -a "${tag_name}" -m "Tagging version ${tag_name}"
+          # Push only the specific tag to the remote repository
+          git push origin "${tag_name}"
